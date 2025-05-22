@@ -30,6 +30,9 @@ const Navbar = () => {
           <Link to="/" className="px-1 py-2 hover:text-accent transition-colors">
             Home
           </Link>
+          <Link to="/products" className="px-1 py-2 hover:text-accent transition-colors">
+            Products
+          </Link>
           <Link to="/category/men" className="px-1 py-2 hover:text-accent transition-colors">
             Men
           </Link>
@@ -81,6 +84,9 @@ const Navbar = () => {
           <nav className="flex flex-col space-y-4">
             <Link to="/" className="px-1 py-2 hover:text-accent transition-colors" onClick={() => setIsMenuOpen(false)}>
               Home
+            </Link>
+            <Link to="/products" className="px-1 py-2 hover:text-accent transition-colors" onClick={() => setIsMenuOpen(false)}>
+              Products
             </Link>
             <Link to="/category/men" className="px-1 py-2 hover:text-accent transition-colors" onClick={() => setIsMenuOpen(false)}>
               Men

@@ -35,7 +35,7 @@ const Index = () => {
               </p>
               <div className="flex gap-4">
                 <Button size="lg" asChild>
-                  <Link to="/category/women">Shop Women</Link>
+                  <Link to="/products">Browse All Products</Link>
                 </Button>
                 <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30" asChild>
                   <Link to="/category/men">Shop Men</Link>
@@ -118,6 +118,17 @@ const Index = () => {
           </div>
           
           <ProductGrid products={newArrivals} />
+        </section>
+        
+        {/* All Products Banner */}
+        <section className="container mx-auto px-4 py-12">
+          <div className="bg-gradient-to-r from-accent/20 to-primary/10 rounded-lg p-8 text-center">
+            <h2 className="text-3xl font-bold mb-4">Explore Our Full Collection</h2>
+            <p className="text-muted-foreground mb-6 max-w-xl mx-auto">Discover all our products in one place. From fashion to accessories, find everything you need.</p>
+            <Button size="lg" asChild>
+              <Link to="/products">Browse All Products</Link>
+            </Button>
+          </div>
         </section>
         
         {/* Testimonials */}
