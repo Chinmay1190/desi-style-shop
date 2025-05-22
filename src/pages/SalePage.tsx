@@ -3,12 +3,11 @@ import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductGrid from '@/components/ProductGrid';
-import { getProducts } from '@/lib/data';
+import { products } from '@/lib/data';
 
 const SalePage = () => {
   // Get products with discount
-  const allProducts = getProducts();
-  const saleProducts = allProducts.filter(product => product.discount && product.discount > 0);
+  const saleProducts = products.filter(product => product.discount && product.discount > 0);
   
   useEffect(() => {
     window.scrollTo(0, 0);
