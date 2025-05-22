@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { useCart } from '@/contexts/CartContext';
+import { useAddress, DeliveryAddress } from '@/contexts/AddressContext';
 import { formatPrice } from '@/lib/data';
 import { toast } from '@/components/ui/use-toast';
 import { ArrowLeft, CreditCard, BadgeIndianRupee, Info } from 'lucide-react';
@@ -16,10 +17,25 @@ import { ArrowLeft, CreditCard, BadgeIndianRupee, Info } from 'lucide-react';
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { items, getCartTotal, clearCart } = useCart();
+  const { saveDeliveryAddress } = useAddress();
   
   const [step, setStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Form state
+  const [formData, setFormData] = useState<DeliveryAddress>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    apartment: '',
+    city: '',
+    state: '',
+    pincode: '',
+    notes: ''
+  });
   
   const cartTotal = getCartTotal();
   const shippingCost = cartTotal > 0 ? (cartTotal > 5000 ? 0 : 150) : 0;
@@ -44,7 +60,12 @@ const CheckoutPage = () => {
     );
   }
   
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
     if (step === 1) {
@@ -53,6 +74,9 @@ const CheckoutPage = () => {
     }
     
     setIsSubmitting(true);
+    
+    // Save delivery address
+    saveDeliveryAddress(formData);
     
     // Simulate payment processing
     setTimeout(() => {
@@ -98,6 +122,8 @@ const CheckoutPage = () => {
                           placeholder="John"
                           required
                           className="mt-1"
+                          value={formData.firstName}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div>
@@ -107,6 +133,8 @@ const CheckoutPage = () => {
                           placeholder="Doe"
                           required
                           className="mt-1"
+                          value={formData.lastName}
+                          onChange={handleInputChange}
                         />
                       </div>
                     </div>
@@ -119,6 +147,8 @@ const CheckoutPage = () => {
                         placeholder="johndoe@example.com"
                         required
                         className="mt-1"
+                        value={formData.email}
+                        onChange={handleInputChange}
                       />
                     </div>
                     
@@ -129,6 +159,8 @@ const CheckoutPage = () => {
                         placeholder="9876543210"
                         required
                         className="mt-1"
+                        value={formData.phone}
+                        onChange={handleInputChange}
                       />
                       <p className="text-xs text-muted-foreground mt-1">
                         For delivery updates
@@ -142,6 +174,8 @@ const CheckoutPage = () => {
                         placeholder="123 Main Street"
                         required
                         className="mt-1"
+                        value={formData.address}
+                        onChange={handleInputChange}
                       />
                     </div>
                     
@@ -151,6 +185,8 @@ const CheckoutPage = () => {
                         id="apartment"
                         placeholder="Apartment 1A"
                         className="mt-1"
+                        value={formData.apartment}
+                        onChange={handleInputChange}
                       />
                     </div>
                     
@@ -162,6 +198,8 @@ const CheckoutPage = () => {
                           placeholder="Mumbai"
                           required
                           className="mt-1"
+                          value={formData.city}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div>
@@ -171,6 +209,8 @@ const CheckoutPage = () => {
                           placeholder="Maharashtra"
                           required
                           className="mt-1"
+                          value={formData.state}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div>
@@ -180,6 +220,8 @@ const CheckoutPage = () => {
                           placeholder="400001"
                           required
                           className="mt-1"
+                          value={formData.pincode}
+                          onChange={handleInputChange}
                         />
                       </div>
                     </div>
@@ -190,6 +232,8 @@ const CheckoutPage = () => {
                         id="notes"
                         placeholder="Any specific instructions for delivery"
                         className="mt-1"
+                        value={formData.notes}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
