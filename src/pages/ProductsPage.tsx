@@ -9,7 +9,7 @@ import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { products } from '@/lib/data';
 import { ProductCategory } from '@/lib/types';
-import { Filter, ArrowDownUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { Filter, ArrowDownUp, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 
 const ProductsPage = () => {
   const [filteredProducts, setFilteredProducts] = useState(products);
@@ -18,9 +18,12 @@ const ProductsPage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [sortOption, setSortOption] = useState<string>('');
   const [showSortOptions, setShowSortOptions] = useState(false);
+  const [animateProducts, setAnimateProducts] = useState(false);
   
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Trigger animation after a small delay for a nice entrance effect
+    setTimeout(() => setAnimateProducts(true), 100);
   }, []);
   
   useEffect(() => {
@@ -100,21 +103,24 @@ const ProductsPage = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-secondary/20">
       <Navbar />
       
       <main className="flex-1 container mx-auto px-4 py-8 animate-fade-in">
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <h1 className="text-3xl font-bold">All Products</h1>
+            <h1 className="text-3xl font-bold tracking-tight flex items-center">
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">All Products</span>
+              <Sparkles className="ml-2 text-accent animate-pulse h-5 w-5" />
+            </h1>
             
-            <div className="flex flex-wrap gap-2">
-              {/* Category quick links */}
+            <div className="flex flex-wrap gap-2 animate-scale-in">
+              {/* Category quick links with hover effect */}
               {categories.map((category) => (
                 <Link 
                   key={category} 
                   to={`/category/${category}`} 
-                  className="inline-block px-3 py-1 rounded-full bg-muted hover:bg-muted/80 text-sm transition-colors"
+                  className="inline-block px-3 py-1 rounded-full bg-muted hover:bg-accent hover:text-accent-foreground text-sm transition-all duration-300 transform hover:scale-105"
                 >
                   {getCategoryLabel(category)}
                 </Link>
@@ -122,59 +128,59 @@ const ProductsPage = () => {
             </div>
           </div>
           
-          <p className="text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
             Showing {filteredProducts.length} products
           </p>
         </div>
         
         {/* Sorting & Filter controls (mobile) */}
-        <div className="flex gap-2 mb-4 md:hidden">
+        <div className="flex gap-2 mb-4 md:hidden animate-fade-in" style={{ animationDelay: "0.3s" }}>
           <Button 
             variant="outline" 
-            className="flex-1 flex gap-2 items-center justify-center"
+            className="flex-1 flex gap-2 items-center justify-center hover:bg-accent hover:text-accent-foreground transition-all"
             onClick={() => setShowFilters(!showFilters)}
           >
-            <Filter size={18} />
+            <Filter size={18} className={showFilters ? "text-accent" : ""} />
             Filters
           </Button>
           
           <div className="relative flex-1">
             <Button 
               variant="outline" 
-              className="w-full flex gap-2 items-center justify-center"
+              className="w-full flex gap-2 items-center justify-center hover:bg-accent hover:text-accent-foreground transition-all"
               onClick={() => setShowSortOptions(!showSortOptions)}
             >
-              <ArrowDownUp size={18} />
+              <ArrowDownUp size={18} className={sortOption ? "text-accent" : ""} />
               {getSortLabel()}
               {showSortOptions ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </Button>
             
             {showSortOptions && (
-              <div className="absolute top-full mt-1 left-0 right-0 bg-background border border-border rounded-md p-2 z-10 shadow-md">
+              <div className="absolute top-full mt-1 left-0 right-0 bg-background/95 backdrop-blur-sm border border-border rounded-md p-2 z-10 shadow-lg animate-scale-in">
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start mb-1" 
+                  className="w-full justify-start mb-1 hover:bg-accent/10" 
                   onClick={() => {setSortOption('price-asc'); setShowSortOptions(false);}}
                 >
                   Price: Low to High
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start mb-1" 
+                  className="w-full justify-start mb-1 hover:bg-accent/10" 
                   onClick={() => {setSortOption('price-desc'); setShowSortOptions(false);}}
                 >
                   Price: High to Low
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start mb-1" 
+                  className="w-full justify-start mb-1 hover:bg-accent/10" 
                   onClick={() => {setSortOption('rating'); setShowSortOptions(false);}}
                 >
                   Best Rated
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start" 
+                  className="w-full justify-start hover:bg-accent/10" 
                   onClick={() => {setSortOption('newest'); setShowSortOptions(false);}}
                 >
                   Newest First
@@ -186,11 +192,11 @@ const ProductsPage = () => {
         
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           {/* Filters - Desktop */}
-          <div className={`${showFilters ? 'block' : 'hidden'} lg:block lg:col-span-1 animate-fade-in`}>
-            <div className="bg-background border border-border rounded-lg p-6 sticky top-20">
+          <div className={`${showFilters ? 'block' : 'hidden'} lg:block lg:col-span-1 animate-fade-in`} style={{ animationDelay: "0.4s" }}>
+            <div className="bg-background/80 backdrop-blur-sm border border-border rounded-lg p-6 sticky top-20 shadow-md transition-all duration-300 hover:shadow-lg">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-lg font-medium">Filters</h2>
-                <Button variant="ghost" size="sm" onClick={clearFilters}>
+                <Button variant="ghost" size="sm" onClick={clearFilters} className="hover:text-accent">
                   Clear all
                 </Button>
               </div>
@@ -217,15 +223,16 @@ const ProductsPage = () => {
                 <h3 className="text-sm font-medium mb-2">Categories</h3>
                 <div className="space-y-2">
                   {categories.map((category) => (
-                    <div key={category} className="flex items-center">
+                    <div key={category} className="flex items-center group">
                       <Checkbox
                         id={`category-${category}`}
                         checked={selectedCategories.includes(category)}
                         onCheckedChange={() => toggleCategory(category)}
+                        className="group-hover:border-accent transition-colors"
                       />
                       <label
                         htmlFor={`category-${category}`}
-                        className="ml-2 text-sm capitalize"
+                        className="ml-2 text-sm capitalize group-hover:text-accent transition-colors cursor-pointer"
                       >
                         {getCategoryLabel(category)}
                       </label>
@@ -240,7 +247,7 @@ const ProductsPage = () => {
                 <div className="space-y-2 mt-2">
                   <Button 
                     variant={sortOption === 'price-asc' ? 'default' : 'ghost'} 
-                    className="w-full justify-start" 
+                    className="w-full justify-start transition-all duration-300 hover:translate-x-1" 
                     size="sm" 
                     onClick={() => setSortOption('price-asc')}
                   >
@@ -248,7 +255,7 @@ const ProductsPage = () => {
                   </Button>
                   <Button 
                     variant={sortOption === 'price-desc' ? 'default' : 'ghost'} 
-                    className="w-full justify-start" 
+                    className="w-full justify-start transition-all duration-300 hover:translate-x-1" 
                     size="sm" 
                     onClick={() => setSortOption('price-desc')}
                   >
@@ -256,7 +263,7 @@ const ProductsPage = () => {
                   </Button>
                   <Button 
                     variant={sortOption === 'rating' ? 'default' : 'ghost'} 
-                    className="w-full justify-start" 
+                    className="w-full justify-start transition-all duration-300 hover:translate-x-1" 
                     size="sm" 
                     onClick={() => setSortOption('rating')}
                   >
@@ -264,7 +271,7 @@ const ProductsPage = () => {
                   </Button>
                   <Button 
                     variant={sortOption === 'newest' ? 'default' : 'ghost'} 
-                    className="w-full justify-start" 
+                    className="w-full justify-start transition-all duration-300 hover:translate-x-1" 
                     size="sm" 
                     onClick={() => setSortOption('newest')}
                   >
@@ -277,15 +284,17 @@ const ProductsPage = () => {
           
           {/* Product Grid */}
           <div className="lg:col-span-3">
-            {filteredProducts.length > 0 ? (
-              <ProductGrid products={filteredProducts} />
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 bg-background border border-border rounded-lg">
-                <h3 className="text-xl font-medium mb-2">No products found</h3>
-                <p className="text-muted-foreground mb-6">Try adjusting your filters</p>
-                <Button onClick={clearFilters}>Clear all filters</Button>
-              </div>
-            )}
+            <div className={`transition-all duration-500 ${animateProducts ? 'opacity-100' : 'opacity-0 translate-y-4'}`}>
+              {filteredProducts.length > 0 ? (
+                <ProductGrid products={filteredProducts} />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 bg-background/80 backdrop-blur-sm border border-border rounded-lg">
+                  <h3 className="text-xl font-medium mb-2">No products found</h3>
+                  <p className="text-muted-foreground mb-6">Try adjusting your filters</p>
+                  <Button onClick={clearFilters} className="transition-transform hover:scale-105">Clear all filters</Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
